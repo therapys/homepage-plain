@@ -3,81 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>karl's hideout</title>
+    <title>Karl's Hideout | Developer & Security Enthusiast</title>
     <meta name="description" content="Karl's personal site - Developer and security enthusiast building cool stuff in the digital realm">
     <meta name="keywords" content="developer, security, web development, minecraft servers">
     <meta name="author" content="Karl">
-    <meta property="og:title" content="karl's hideout">
+    <meta property="og:title" content="Karl's Hideout">
     <meta property="og:description" content="Building cool stuff in the digital realm">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://yourdomain.com">
     <meta name="theme-color" content="#001830">
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍💻</text></svg>">
 </head>
 <body>
-    <main>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+    
+    <main id="main-content">
         <div class="content">
             <header class="intro">
                 <h1>karl's hideout</h1>
                 <h2 class="subtitle">building cool stuff in the digital realm</h2>
+                <div class="theme-toggle">
+                    <button id="themePink" class="theme-btn active" aria-label="Pink theme">
+                        <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                    </button>
+                    <button id="themeCyan" class="theme-btn" aria-label="Cyan theme">
+                        <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                    </button>
+                    <button id="themeGreen" class="theme-btn" aria-label="Green theme">
+                        <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                    </button>
+                </div>
             </header>
 
-            <div class="scroll-indicator">
+            <div class="scroll-indicator" aria-hidden="true">
                 <div class="scroll-arrow"></div>
             </div>
 
-            <section class="about">
+            <section class="about" aria-labelledby="about-heading">
+                <h3 id="about-heading">about me</h3>
                 <p>
                     hi! i'm karl — a developer and security enthusiast with a passion for building cool things.
+                    i specialize in creating secure and efficient solutions that make a difference.
                 </p>
             </section>
 
-            <section class="gaming">
-                <h3>let's play</h3>
+            <section class="gaming" aria-labelledby="gaming-heading">
+                <h3 id="gaming-heading">let's play</h3>
                 <div class="snake-game-container">
-                    <canvas id="snakeCanvas" width="600" height="600"></canvas>
+                    <div class="game-start-screen" id="gameStartScreen">
+                        <div class="start-screen-content">
+                            <h4 class="game-title">Snake Game</h4>
+                            <div class="snake-animation">
+                                <div class="snake-head"></div>
+                                <div class="snake-body"></div>
+                                <div class="snake-body"></div>
+                                <div class="snake-body"></div>
+                                <div class="food-dot"></div>
+                            </div>
+                            <button id="startGame" class="retro-btn" aria-label="Start Snake Game">Start Game</button>
+                            <div class="high-score">High Score: <span id="highScore">0</span></div>
+                            <div class="instructions">
+                                <p><span class="instruction-icon">⬆️⬇️⬅️➡️</span> Use arrow keys to control the snake</p>
+                                <p><span class="instruction-icon">🔵</span> Collect orbs to grow and increase your score</p>
+                                <p><span class="instruction-icon">⚠️</span> Avoid hitting the walls or yourself</p>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="snakeCanvas" width="400" height="400" aria-label="Snake Game"></canvas>
                     <div class="game-controls">
                         <div class="score">Score: <span id="score">0</span></div>
-                        <button id="startGame" class="retro-btn">Start Game</button>
-                        <div class="instructions">
-                            Use arrow keys to control the snake<br>
-                            Collect the blue squares to grow and increase your score
-                        </div>
                     </div>
                 </div>
             </section>
 
-            <section class="current-work">
-                <h3>current ventures</h3>
+            <section class="current-work" aria-labelledby="work-heading">
+                <h3 id="work-heading">current ventures</h3>
                 <ul class="projects-list">
                     <li>
-                        co-founder & COO @ <a href="https://volton.ee" target="_blank">volton.ee</a>
+                        <span class="role">co-founder & COO</span> @ <a href="https://volton.ee" target="_blank" rel="noopener noreferrer">volton.ee</a>
                     </li>
                 </ul>
             </section>
 
-            <section class="photography">
-                <h3>through my lens</h3>
+            <section class="photography" aria-labelledby="photo-heading">
+                <h3 id="photo-heading">through my lens</h3>
                 <p>
                     sometimes i capture moments in pixels. wander through my <a href="gallery/">visual diary</a>.
                 </p>
             </section>
 
-            <section class="links">
-                <h3>find me</h3>
+            <section class="links" aria-labelledby="links-heading">
+                <h3 id="links-heading">find me</h3>
                 <ul class="social-links">
                     <li>
-                        <a href="https://github.com/therapys" target="_blank">github</a>
+                        <a href="https://github.com/therapys" target="_blank" rel="noopener noreferrer">
+                            <span class="social-icon">👨‍💻</span> github
+                        </a>
                     </li>
                     <li>
-                        <a href="https://www.linkedin.com/in/karl-kiilasp%C3%A4%C3%A4-65932a244/" target="_blank">linkedin</a>
+                        <a href="https://www.linkedin.com/in/karl-kiilasp%C3%A4%C3%A4-65932a244/" target="_blank" rel="noopener noreferrer">
+                            <span class="social-icon">💼</span> linkedin
+                        </a>
                     </li>
                 </ul>
             </section>
         </div>
 
         <footer>
-            <div class="footer-nav">
+            <div class="footer-nav" role="navigation" aria-label="Footer navigation">
                 <a href="/">home</a>
                 <a href="/projects/">projects</a>
                 <a href="/gallery/">gallery</a>
@@ -86,5 +126,6 @@
         </footer>
     </main>
     <script src="snake.js"></script>
+    <script src="theme.js"></script>
 </body>
 </html> 

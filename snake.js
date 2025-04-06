@@ -1,248 +1,253 @@
-class SnakeGame {
-    constructor() {
-        this.canvas = document.getElementById('snakeCanvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.gridSize = 30;
-        this.tileCount = 20;
-        this.snake = [
-            { x: 10, y: 10 }
-        ];
-        this.food = { x: 15, y: 15 };
-        this.dx = 1; // Start moving right
-        this.dy = 0;
-        this.score = 0;
-        this.gameLoop = null;
-        this.gameSpeed = 150; // Slowed down a bit for better playability
-        this.isGameOver = false;
+// Snake game variables
+let canvas, ctx;
+let snake = [];
+let food = {};
+let direction = 'right';
+let score = 0;
+let highScore = 0;
+let gameLoop;
+let gameSpeed = 100;
+let gridSize = 20;
+let gameStarted = false;
 
-        // Bind event listeners
-        document.getElementById('startGame').addEventListener('click', () => this.startGame());
-        document.addEventListener('keydown', (e) => this.handleKeyPress(e));
+// Initialize the game
+function initGame() {
+    canvas = document.getElementById('snakeCanvas');
+    ctx = canvas.getContext('2d');
+    
+    // Set up event listeners
+    document.getElementById('startGame').addEventListener('click', startGame);
+    document.addEventListener('keydown', handleKeyPress);
+    
+    // Load high score from local storage
+    loadHighScore();
+    
+    // Initialize snake
+    resetGame();
+}
 
-        // Add loading state
-        this.isLoading = true;
-        this.loadAssets().then(() => {
-            this.isLoading = false;
-            this.draw();
-        });
-    }
-
-    async loadAssets() {
-        // Simulate asset loading (you can add actual assets later)
-        await new Promise(resolve => setTimeout(resolve, 300));
-        this.draw();
-    }
-
-    startGame() {
-        if (this.gameLoop) {
-            clearInterval(this.gameLoop);
-        }
-        // Reset game state
-        this.snake = [
-            { x: 5, y: 10 }, // Start more to the left to give player time
-            { x: 4, y: 10 }  // Add initial tail segment
-        ];
-        this.dx = 1; // Start moving right
-        this.dy = 0;
-        this.score = 0;
-        this.isGameOver = false;
-        this.updateScore();
-        this.placeFood();
-        this.gameLoop = setInterval(() => this.gameUpdate(), this.gameSpeed);
-    }
-
-    gameUpdate() {
-        if (this.isGameOver) return;
-
-        // Move snake
-        const head = { x: this.snake[0].x + this.dx, y: this.snake[0].y + this.dy };
-
-        // Check wall collision
-        if (head.x < 0 || head.x >= this.tileCount || head.y < 0 || head.y >= this.tileCount) {
-            this.gameOver();
-            return;
-        }
-
-        // Check self collision - start checking from index 1 to avoid false collision with neck
-        for (let i = 1; i < this.snake.length; i++) {
-            if (head.x === this.snake[i].x && head.y === this.snake[i].y) {
-                this.gameOver();
-                return;
-            }
-        }
-
-        // Add new head
-        this.snake.unshift(head);
-
-        // Check food collision
-        if (head.x === this.food.x && head.y === this.food.y) {
-            this.score += 10;
-            this.updateScore();
-            this.placeFood();
-            // Speed up the game slightly with each food eaten
-            if (this.gameSpeed > 70) {
-                clearInterval(this.gameLoop);
-                this.gameSpeed -= 2;
-                this.gameLoop = setInterval(() => this.gameUpdate(), this.gameSpeed);
-            }
-        } else {
-            this.snake.pop();
-        }
-
-        this.draw();
-    }
-
-    draw() {
-        if (this.isLoading) {
-            // Show loading state
-            this.ctx.fillStyle = '#000';
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-            this.ctx.fillStyle = '#ff69b4';
-            this.ctx.font = '20px VT323';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText('Loading...', this.canvas.width/2, this.canvas.height/2);
-            return;
-        }
-
-        // Clear canvas
-        this.ctx.fillStyle = '#000';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // Draw grid
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-        for (let i = 0; i < this.tileCount; i++) {
-            this.ctx.beginPath();
-            this.ctx.moveTo(i * this.gridSize, 0);
-            this.ctx.lineTo(i * this.gridSize, this.canvas.height);
-            this.ctx.stroke();
-            this.ctx.beginPath();
-            this.ctx.moveTo(0, i * this.gridSize);
-            this.ctx.lineTo(this.canvas.width, i * this.gridSize);
-            this.ctx.stroke();
-        }
-
-        // Draw snake with gradient effect
-        this.snake.forEach((segment, index) => {
-            const alpha = 1 - (index / (this.snake.length * 2)); // Gradient effect
-            this.ctx.fillStyle = `rgba(255, 105, 180, ${Math.max(0.4, alpha)})`;
-            this.ctx.shadowColor = '#ff69b4';
-            this.ctx.shadowBlur = 10;
-            this.ctx.fillRect(
-                segment.x * this.gridSize + 1,
-                segment.y * this.gridSize + 1,
-                this.gridSize - 2,
-                this.gridSize - 2
-            );
-            this.ctx.shadowBlur = 0; // Reset shadow for next elements
-        });
-
-        // Draw food with glow effect
-        this.ctx.fillStyle = '#8cc2dd';
-        this.ctx.shadowColor = '#8cc2dd';
-        this.ctx.shadowBlur = 15;
-        this.ctx.fillRect(
-            this.food.x * this.gridSize + 1,
-            this.food.y * this.gridSize + 1,
-            this.gridSize - 2,
-            this.gridSize - 2
-        );
-        this.ctx.shadowBlur = 0;
-    }
-
-    handleKeyPress(e) {
-        // Prevent page scrolling when using arrow keys
-        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-            e.preventDefault();
-        }
-
-        // Prevent reverse direction
-        switch(e.key) {
-            case 'ArrowUp':
-                if (this.dy !== 1 && !this.isGameOver) {
-                    this.dx = 0;
-                    this.dy = -1;
-                }
-                break;
-            case 'ArrowDown':
-                if (this.dy !== -1 && !this.isGameOver) {
-                    this.dx = 0;
-                    this.dy = 1;
-                }
-                break;
-            case 'ArrowLeft':
-                if (this.dx !== 1 && !this.isGameOver) {
-                    this.dx = -1;
-                    this.dy = 0;
-                }
-                break;
-            case 'ArrowRight':
-                if (this.dx !== -1 && !this.isGameOver) {
-                    this.dx = 1;
-                    this.dy = 0;
-                }
-                break;
-        }
-    }
-
-    placeFood() {
-        let newFood;
-        do {
-            newFood = {
-                x: Math.floor(Math.random() * (this.tileCount - 2)) + 1,
-                y: Math.floor(Math.random() * (this.tileCount - 2)) + 1
-            };
-        } while (this.snake.some(segment => 
-            segment.x === newFood.x && segment.y === newFood.y));
-        this.food = newFood;
-    }
-
-    gameOver() {
-        this.isGameOver = true;
-        clearInterval(this.gameLoop);
-        
-        // Fade effect
-        let alpha = 0;
-        const fadeInterval = setInterval(() => {
-            alpha += 0.05;
-            if (alpha >= 0.7) {
-                clearInterval(fadeInterval);
-            }
-            
-            this.ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-            
-            // Draw game over text with glow effect
-            this.ctx.fillStyle = '#ff69b4';
-            this.ctx.shadowColor = '#ff69b4';
-            this.ctx.shadowBlur = 10;
-            this.ctx.font = '30px VT323';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText('GAME OVER', this.canvas.width/2, this.canvas.height/2);
-            this.ctx.font = '20px VT323';
-            this.ctx.fillText(`Score: ${this.score}`, this.canvas.width/2, this.canvas.height/2 + 30);
-            this.ctx.fillText('Press Start to play again', this.canvas.width/2, this.canvas.height/2 + 60);
-            this.ctx.shadowBlur = 0;
-        }, 50);
-    }
-
-    updateScore() {
-        document.getElementById('score').textContent = this.score;
-    }
-
-    handleError(error) {
-        console.error('Game error:', error);
-        this.ctx.fillStyle = '#000';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = '#ff69b4';
-        this.ctx.font = '20px VT323';
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText('Oops! Something went wrong.', this.canvas.width/2, this.canvas.height/2);
-        this.ctx.fillText('Please refresh the page.', this.canvas.width/2, this.canvas.height/2 + 30);
+// Load high score from local storage
+function loadHighScore() {
+    const savedHighScore = localStorage.getItem('snakeHighScore');
+    if (savedHighScore) {
+        highScore = parseInt(savedHighScore);
+        document.getElementById('highScore').textContent = highScore;
     }
 }
 
-// Initialize game when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    const game = new SnakeGame();
-    game.draw();
-}); 
+// Save high score to local storage
+function saveHighScore() {
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('snakeHighScore', highScore);
+        document.getElementById('highScore').textContent = highScore;
+    }
+}
+
+// Reset game state
+function resetGame() {
+    snake = [
+        {x: 5, y: 5},
+        {x: 4, y: 5},
+        {x: 3, y: 5}
+    ];
+    direction = 'right';
+    score = 0;
+    document.getElementById('score').textContent = score;
+    generateFood();
+}
+
+// Start the game
+function startGame() {
+    if (gameStarted) return;
+    
+    gameStarted = true;
+    document.getElementById('gameStartScreen').classList.add('hidden');
+    document.querySelector('.game-controls').classList.add('visible');
+    canvas.style.display = 'block';
+    resetGame();
+    gameLoop = setInterval(updateGame, gameSpeed);
+}
+
+// Generate food at random position
+function generateFood() {
+    food = {
+        x: Math.floor(Math.random() * (canvas.width / gridSize)),
+        y: Math.floor(Math.random() * (canvas.height / gridSize))
+    };
+    
+    // Make sure food doesn't spawn on snake
+    for (let segment of snake) {
+        if (segment.x === food.x && segment.y === food.y) {
+            generateFood();
+            break;
+        }
+    }
+}
+
+// Handle keyboard input
+function handleKeyPress(e) {
+    // Start game on any key press if not started
+    if (!gameStarted && e.key.startsWith('Arrow')) {
+        startGame();
+        return;
+    }
+    
+    if (!gameStarted) return;
+    
+    const key = e.key;
+    if (key === 'ArrowUp' && direction !== 'down') direction = 'up';
+    else if (key === 'ArrowDown' && direction !== 'up') direction = 'down';
+    else if (key === 'ArrowLeft' && direction !== 'right') direction = 'left';
+    else if (key === 'ArrowRight' && direction !== 'left') direction = 'right';
+}
+
+// Update game state
+function updateGame() {
+    const head = {x: snake[0].x, y: snake[0].y};
+    
+    // Move head based on direction
+    switch(direction) {
+        case 'up': head.y--; break;
+        case 'down': head.y++; break;
+        case 'left': head.x--; break;
+        case 'right': head.x++; break;
+    }
+    
+    // Check for collisions
+    if (isCollision(head)) {
+        gameOver();
+        return;
+    }
+    
+    // Add new head
+    snake.unshift(head);
+    
+    // Check if food is eaten
+    if (head.x === food.x && head.y === food.y) {
+        score += 10;
+        document.getElementById('score').textContent = score;
+        generateFood();
+        // Increase speed slightly as score increases
+        if (gameSpeed > 60 && snake.length % 3 === 0) {
+            clearInterval(gameLoop);
+            gameSpeed -= 5;
+            gameLoop = setInterval(updateGame, gameSpeed);
+        }
+    } else {
+        snake.pop();
+    }
+    
+    drawGame();
+}
+
+// Check for collisions
+function isCollision(head) {
+    // Wall collision
+    if (head.x < 0 || head.x >= canvas.width / gridSize ||
+        head.y < 0 || head.y >= canvas.height / gridSize) {
+        return true;
+    }
+    
+    // Self collision
+    for (let i = 1; i < snake.length; i++) {
+        if (head.x === snake[i].x && head.y === snake[i].y) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+// Draw the game
+function drawGame() {
+    // Clear canvas
+    ctx.fillStyle = '#001830';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw grid
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+    for (let i = 0; i < canvas.width / gridSize; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * gridSize, 0);
+        ctx.lineTo(i * gridSize, canvas.height);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(0, i * gridSize);
+        ctx.lineTo(canvas.width, i * gridSize);
+        ctx.stroke();
+    }
+    
+    // Draw snake with gradient effect
+    snake.forEach((segment, index) => {
+        const alpha = 1 - (index / (snake.length * 2));
+        ctx.fillStyle = `rgba(255, 105, 180, ${Math.max(0.4, alpha)})`;
+        ctx.shadowColor = '#ff69b4';
+        ctx.shadowBlur = 5;
+        ctx.fillRect(
+            segment.x * gridSize + 1,
+            segment.y * gridSize + 1,
+            gridSize - 2,
+            gridSize - 2
+        );
+    });
+    ctx.shadowBlur = 0;
+    
+    // Draw food with glow effect
+    ctx.fillStyle = '#e0ffff';
+    ctx.shadowColor = '#e0ffff';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.arc(
+        food.x * gridSize + gridSize/2,
+        food.y * gridSize + gridSize/2,
+        gridSize/2 - 2,
+        0,
+        Math.PI * 2
+    );
+    ctx.fill();
+    ctx.shadowBlur = 0;
+}
+
+// Game over
+function gameOver() {
+    clearInterval(gameLoop);
+    gameStarted = false;
+    
+    // Update high score
+    saveHighScore();
+    
+    // Fade effect
+    let alpha = 0;
+    const fadeInterval = setInterval(() => {
+        alpha += 0.05;
+        if (alpha >= 0.7) {
+            clearInterval(fadeInterval);
+            document.getElementById('gameStartScreen').classList.remove('hidden');
+            document.querySelector('.game-controls').classList.remove('visible');
+            canvas.style.display = 'none';
+        }
+        
+        ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Game over text
+        ctx.fillStyle = '#ff69b4';
+        ctx.shadowColor = '#ff69b4';
+        ctx.shadowBlur = 10;
+        ctx.font = '30px var(--font-main)';
+        ctx.textAlign = 'center';
+        ctx.fillText('GAME OVER', canvas.width/2, canvas.height/2);
+        ctx.font = '20px var(--font-main)';
+        ctx.fillText(`Score: ${score}`, canvas.width/2, canvas.height/2 + 30);
+        
+        // Show high score
+        ctx.font = '18px var(--font-main)';
+        ctx.fillText(`High Score: ${highScore}`, canvas.width/2, canvas.height/2 + 60);
+        ctx.shadowBlur = 0;
+    }, 50);
+}
+
+// Initialize the game when the page loads
+document.addEventListener('DOMContentLoaded', initGame); 
