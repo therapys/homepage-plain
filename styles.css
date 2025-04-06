@@ -61,14 +61,11 @@ a {
     transition: all 0.3s ease;
     text-shadow: none;
     position: relative;
-    padding-bottom: 1px;
-    border-bottom: 1px solid transparent;
+    padding: 0.1em 0;
 }
 
 a:hover {
     color: var(--text-color);
-    text-decoration: none;
-    border-bottom: 1px solid currentColor;
     text-shadow: var(--neon-glow);
 }
 
@@ -243,7 +240,10 @@ h1:hover {
 }
 
 section {
-    margin-bottom: var(--section-spacing);
+    margin-bottom: clamp(2rem, 5vw, var(--section-spacing));
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s ease forwards;
 }
 
 section h3 {
@@ -420,4 +420,228 @@ section h3::after {
 
 .gallery-item img {
     animation: fadeIn 0.5s ease-in;
+}
+
+/* Snake Game Styles */
+.gaming {
+    display: none; /* Hide entire gaming section by default */
+}
+
+/* Show gaming section only on desktop */
+@media (min-width: 768px) {
+    .gaming {
+        display: block;
+    }
+}
+
+#snakeCanvas {
+    width: 100%;
+    max-width: 600px; /* Increased from 400px */
+    height: auto;
+    aspect-ratio: 1;
+    background: #000;
+    border: 2px solid var(--heading-color);
+    border-radius: 4px;
+    image-rendering: pixelated;
+    box-shadow: 0 0 20px rgba(255, 105, 180, 0.2);
+}
+
+.game-controls {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.score {
+    font-size: 1.5em;
+    color: var(--heading-color);
+    text-shadow: var(--neon-glow);
+}
+
+.retro-btn {
+    background: transparent;
+    border: 2px solid var(--heading-color);
+    color: var(--heading-color);
+    padding: 0.5em 1.5em;
+    font-family: var(--font-main);
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    border-radius: 4px;
+}
+
+.retro-btn:hover {
+    background: var(--heading-color);
+    color: var(--background-color);
+    box-shadow: 0 0 10px var(--heading-color);
+}
+
+.instructions {
+    font-size: 0.9em;
+    color: var(--text-color);
+    opacity: 0.8;
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* Scroll indicator styles */
+.scroll-indicator {
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none; /* Hidden by default on mobile */
+    z-index: 100;
+}
+
+.scroll-arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid var(--heading-color);
+    border-bottom: 2px solid var(--heading-color);
+    transform: rotate(45deg);
+    animation: scrollArrow 2s infinite;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.scroll-arrow:hover {
+    opacity: 1;
+    border-color: var(--text-color);
+    box-shadow: 0 0 10px var(--neon-glow);
+}
+
+@keyframes scrollArrow {
+    0% {
+        transform: rotate(45deg) translate(0, 0);
+        opacity: 0.7;
+    }
+    50% {
+        transform: rotate(45deg) translate(10px, 10px);
+        opacity: 1;
+    }
+    100% {
+        transform: rotate(45deg) translate(0, 0);
+        opacity: 0.7;
+    }
+}
+
+/* Show scroll indicator only on desktop */
+@media (min-width: 768px) {
+    .scroll-indicator {
+        display: block;
+    }
+}
+
+/* Add smooth transitions for all interactive elements */
+* {
+    scroll-behavior: smooth;
+}
+
+/* Add underline animation for links */
+a:not(.footer-nav a)::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: 0;
+    left: 50%;
+    background-color: currentColor;
+    transition: all 0.3s ease;
+}
+
+a:not(.footer-nav a):hover::after {
+    width: 100%;
+    left: 0;
+}
+
+/* Improve readability */
+body {
+    line-height: 1.7;
+    font-size: clamp(1rem, 1.1vw, 1.2rem); /* Responsive font size */
+    max-width: min(var(--width), 90vw); /* Prevent horizontal scroll */
+    padding: clamp(1rem, 3vw, 2rem);
+}
+
+/* Add visual feedback for interactive elements */
+button, a {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+button:active, a:active {
+    transform: scale(0.98);
+}
+
+/* Add fade-in animation */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add animation delay for sequential loading */
+section:nth-child(2) { animation-delay: 0.1s; }
+section:nth-child(3) { animation-delay: 0.2s; }
+section:nth-child(4) { animation-delay: 0.3s; }
+
+/* Improve mobile experience */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .intro h1 {
+        font-size: 2.5em;
+    }
+
+    .subtitle {
+        font-size: 1.2em;
+    }
+
+    /* Increase touch targets on mobile */
+    a, button {
+        padding: 0.5em;
+        margin: 0.2em;
+    }
+
+    li {
+        padding: 0.7em 0;
+    }
+}
+
+/* Keyboard navigation styles */
+.keyboard-navigation *:focus {
+    outline: 2px solid var(--heading-color);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
+/* Improve focus visibility */
+:focus {
+    outline: none;
+}
+
+/* Skip to main content for accessibility */
+.skip-to-main {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 1em;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.skip-to-main:focus {
+    left: 50%;
+    transform: translateX(-50%);
 } 

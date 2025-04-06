@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>karl's hideout</title>
-    <meta name="description" content="karl's personal site">
+    <meta name="description" content="Karl's personal site - Developer and security enthusiast building cool stuff in the digital realm">
+    <meta name="keywords" content="developer, security, web development, minecraft servers">
+    <meta name="author" content="Karl">
+    <meta property="og:title" content="karl's hideout">
+    <meta property="og:description" content="Building cool stuff in the digital realm">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com">
+    <meta name="theme-color" content="#001830">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -15,10 +22,29 @@
                 <h2 class="subtitle">building cool stuff in the digital realm</h2>
             </header>
 
+            <div class="scroll-indicator">
+                <div class="scroll-arrow"></div>
+            </div>
+
             <section class="about">
                 <p>
                     hi! i'm karl — a developer and security enthusiast with a passion for building cool things.
                 </p>
+            </section>
+
+            <section class="gaming">
+                <h3>let's play</h3>
+                <div class="snake-game-container">
+                    <canvas id="snakeCanvas" width="600" height="600"></canvas>
+                    <div class="game-controls">
+                        <div class="score">Score: <span id="score">0</span></div>
+                        <button id="startGame" class="retro-btn">Start Game</button>
+                        <div class="instructions">
+                            Use arrow keys to control the snake<br>
+                            Collect the blue squares to grow and increase your score
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <section class="current-work">
@@ -28,14 +54,6 @@
                         co-founder & COO @ <a href="https://volton.ee" target="_blank">volton.ee</a>
                     </li>
                 </ul>
-            </section>
-
-            <section class="gaming">
-                <h3>gaming projects</h3>
-                <p>
-                    i make and run <a href="https://minecraft.net/" target="_blank">minecraft</a> servers. 
-                    check out my <a href="projects/">projects page</a> for the full list.
-                </p>
             </section>
 
             <section class="photography">
@@ -67,5 +85,6 @@
             <div class="copyright">© 2025 karl</div>
         </footer>
     </main>
+    <script src="snake.js"></script>
 </body>
 </html> 
