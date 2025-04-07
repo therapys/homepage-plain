@@ -6,13 +6,33 @@
     <title>Projects - karl's hideout</title>
     <meta name="description" content="karl's projects and ventures">
     <link rel="stylesheet" href="../styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍💻</text></svg>">
 </head>
 <body>
-    <main>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+    
+    <main id="main-content">
         <div class="content">
             <header class="intro">
                 <h1>projects</h1>
                 <h2 class="subtitle">stuff i've built & launched</h2>
+                <div class="theme-toggle">
+                    <button id="themePink" class="theme-btn" aria-label="Pink theme">
+                        <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                    </button>
+                    <button id="themeCyan" class="theme-btn" aria-label="Cyan theme">
+                        <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                    </button>
+                    <button id="themeGreen" class="theme-btn" aria-label="Green theme">
+                        <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                    </button>
+                </div>
             </header>
 
             <section class="active-projects">
@@ -69,5 +89,7 @@
             <div class="copyright">© 2025 karl</div>
         </footer>
     </main>
+    <script src="../theme.js"></script>
+    <script src="../matrix.js"></script>
 </body>
 </html> 

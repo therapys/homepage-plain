@@ -56,29 +56,30 @@
 
             <section class="gaming" aria-labelledby="gaming-heading">
                 <h3 id="gaming-heading">let's play</h3>
-                <div class="snake-game-container">
-                    <div class="game-start-screen" id="gameStartScreen">
-                        <div class="start-screen-content">
-                            <h4 class="game-title">Snake Game</h4>
-                            <div class="snake-animation">
-                                <div class="snake-head"></div>
-                                <div class="snake-body"></div>
-                                <div class="snake-body"></div>
-                                <div class="snake-body"></div>
-                                <div class="food-dot"></div>
-                            </div>
-                            <button id="startGame" class="retro-btn" aria-label="Start Snake Game">Start Game</button>
-                            <div class="high-score">High Score: <span id="highScore">0</span></div>
-                            <div class="instructions">
-                                <p><span class="instruction-icon">⬆️⬇️⬅️➡️</span> Use arrow keys to control the snake</p>
-                                <p><span class="instruction-icon">🔵</span> Collect orbs to grow and increase your score</p>
-                                <p><span class="instruction-icon">⚠️</span> Avoid hitting the walls or yourself</p>
+                <div class="games-grid">
+                    <div class="snake-game-container">
+                        <div class="game-start-screen" id="gameStartScreen">
+                            <div class="start-screen-content">
+                                <div class="high-score">High Score: <span id="highScore">0</span></div>
+                                <button class="retro-btn" id="startGame">Start Game</button>
                             </div>
                         </div>
+                        <canvas id="snakeCanvas" width="400" height="400"></canvas>
+                        <div class="game-controls">
+                            <div class="score">Score: <span id="score">0</span></div>
+                        </div>
                     </div>
-                    <canvas id="snakeCanvas" width="400" height="400" aria-label="Snake Game"></canvas>
-                    <div class="game-controls">
-                        <div class="score">Score: <span id="score">0</span></div>
+                    <div class="tetris-game-container">
+                        <div class="game-start-screen" id="tetrisStartScreen">
+                            <div class="start-screen-content">
+                                <div class="high-score">High Score: <span id="tetrisHighScore">0</span></div>
+                                <button class="retro-btn" id="startTetris">Start Game</button>
+                            </div>
+                        </div>
+                        <canvas id="tetrisCanvas"></canvas>
+                        <div class="game-controls">
+                            <div class="score">Score: <span id="tetrisScore">0</span></div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -104,12 +105,12 @@
                 <ul class="social-links">
                     <li>
                         <a href="https://github.com/therapys" target="_blank" rel="noopener noreferrer">
-                            <span class="social-icon">👨‍💻</span> github
+                            github
                         </a>
                     </li>
                     <li>
                         <a href="https://www.linkedin.com/in/karl-kiilasp%C3%A4%C3%A4-65932a244/" target="_blank" rel="noopener noreferrer">
-                            <span class="social-icon">💼</span> linkedin
+                            linkedin
                         </a>
                     </li>
                 </ul>
@@ -125,7 +126,9 @@
             <div class="copyright">© 2025 karl</div>
         </footer>
     </main>
-    <script src="snake.js"></script>
-    <script src="theme.js"></script>
+    <script src="snake.js" defer></script>
+    <script src="theme.js" defer></script>
+    <script src="matrix.js" defer></script>
+    <script src="tetris.js" defer></script>
 </body>
 </html> 
