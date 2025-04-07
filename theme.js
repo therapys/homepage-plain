@@ -26,6 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
         updateActiveButton(theme);
+        // Dispatch theme change event
+        document.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme } }));
     }
     
     function updateActiveButton(theme) {
